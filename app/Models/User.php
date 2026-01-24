@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'gold',         // 金幣
+        'stamina',      // 目前體力
+        'max_stamina',  // 體力上限
+        'job',          // 職業
+        'avatar',       // 頭像路徑
     ];
 
     /**
