@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            // 確保指向具體的 CheckAdmin class
             'admin' => \App\Http\Middleware\CheckAdmin::class,
         ]);
     })

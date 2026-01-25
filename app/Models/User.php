@@ -12,9 +12,10 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    const ROLE_PLAYER = 'Player'; // 一般玩家
-    const ROLE_GM = 'GM';         // 一般管理員 (處理檢舉、發放獎勵)
-    const ROLE_OM = 'OM';         // 運營管理員 (修改系統參數、全
+    // --- [修正 1] 定義角色常量 ---
+    const ROLE_PLAYER = 'Player';
+    const ROLE_GM = 'GM';
+    const ROLE_OM = 'OM';
 
     /**
      * The attributes that are mass assignable.
@@ -25,11 +26,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'gold',         // 金幣
-        'stamina',      // 目前體力
-        'max_stamina',  // 體力上限
-        'job',          // 職業
-        'avatar',       // 頭像路徑
+        // --- [修正 2] 允許寫入遊戲數值與角色 ---
+        'gold',
+        'stamina',
+        'max_stamina',
+        'job',
         'role',
     ];
 
@@ -56,17 +57,17 @@ class User extends Authenticatable
         ];
     }
 
-    // 快速判斷權限的方法
-    public function isOM()
+    // --- [修正 3] 定義權限判斷方法 ---
+    
+    // 判斷是否為運營管理員
+    public function isOM(): bool
     {
         return $this->role === self::ROLE_OM;
     }
-    public function isGM()
+
+    // 判斷是否為管理員 (包含 GM 與 OM)
+    public function isGM(): bool
     {
-        return $this->role === self::ROLE_GM || $this->isOM();
-    }
-    public function isPlayer()
-    {
-        return $this->role === self::ROLE_PLAYER;
+        return in_array($this->role, [self::ROLE_GM, self::ROLE_OM]);
     }
 }
