@@ -19,7 +19,7 @@ new class extends Component
      * 監聽 'logo-updated' 事件
      * 當後台 SystemSettings 更新圖片時，這裡會自動被觸發
      */
-    #[On('logo-updated')] 
+    #[On('logo-updated')]
     public function refreshLogo()
     {
         $this->logoUrl = GameSetting::get('backend_logo_url');
@@ -42,56 +42,60 @@ new class extends Component
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ request()->is('admin*') ? route('admin.index') : route('dashboard') }}" wire:navigate>
-                        
+
                         @if($logoUrl)
-                            <img src="{{ $logoUrl }}" 
-                                 class="block h-10 w-auto drop-shadow-md hover:scale-105 transition duration-300 object-contain" 
-                                 alt="府邸官印" />
+                        <img src="{{ $logoUrl }}"
+                            class="block h-10 w-auto drop-shadow-md hover:scale-105 transition duration-300 object-contain"
+                            alt="府邸官印" />
                         @else
-                            <x-application-logo class="block h-10 w-auto fill-current text-tungning-gold drop-shadow-md" />
+                        <x-application-logo class="block h-10 w-auto fill-current text-tungning-gold drop-shadow-md" />
                         @endif
 
                     </a>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    
+
                     @if(request()->is('admin*'))
-                        {{-- [後台模式] --}}
-                        <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')" wire:navigate>
-                            {{ __('營運總署') }}
-                        </x-nav-link>
+                    {{-- [後台模式] --}}
+                    <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')" wire:navigate>
+                        {{ __('營運總署') }}
+                    </x-nav-link>
 
-                        @if(auth()->user()->isGM())
-                            <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')" wire:navigate>
-                                {{ __('戶籍名冊') }}
-                            </x-nav-link>
-                            
-                            <x-nav-link :href="route('admin.settings')" :active="request()->routeIs('admin.settings')" wire:navigate>
-                                {{ __('府庫規章') }}
-                            </x-nav-link>
-                        @endif
+                    @if(auth()->user()->isGM())
+                    <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')" wire:navigate>
+                        {{ __('戶籍名冊') }}
+                    </x-nav-link>
 
-                        {{-- 分隔線 --}}
-                        <div class="flex items-center ml-4">
-                            <span class="text-tungning-gold/30">|</span>
-                        </div>
+                    <x-nav-link :href="route('admin.settings')" :active="request()->routeIs('admin.settings')" wire:navigate>
+                        {{ __('府庫規章') }}
+                    </x-nav-link>
 
-                        <x-nav-link :href="route('dashboard')" :active="false" wire:navigate class="opacity-70 hover:opacity-100">
-                            {{ __('⬅ 返回府邸') }}
-                        </x-nav-link>
+                    <x-nav-link :href="route('admin.avatars')" :active="request()->routeIs('admin.avatars')" wire:navigate>
+                        {{ __('人物圖鑑') }}
+                    </x-nav-link>
+                    @endif
+
+                    {{-- 分隔線 --}}
+                    <div class="flex items-center ml-4">
+                        <span class="text-tungning-gold/30">|</span>
+                    </div>
+
+                    <x-nav-link :href="route('dashboard')" :active="false" wire:navigate class="opacity-70 hover:opacity-100">
+                        {{ __('⬅ 返回府邸') }}
+                    </x-nav-link>
 
                     @else
-                        {{-- [前台模式] --}}
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                            {{ __('東寧府邸') }}
-                        </x-nav-link>
+                    {{-- [前台模式] --}}
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                        {{ __('東寧府邸') }}
+                    </x-nav-link>
 
-                        @if(auth()->user()->isGM())
-                            <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')" wire:navigate>
-                                {{ __('進入營運總署') }}
-                            </x-nav-link>
-                        @endif
+                    @if(auth()->user()->isGM())
+                    <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')" wire:navigate>
+                        {{ __('進入營運總署') }}
+                    </x-nav-link>
+                    @endif
                     @endif
 
                 </div>
@@ -102,11 +106,11 @@ new class extends Component
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-4 py-2 border border-tungning-gold/30 text-sm leading-4 font-bold rounded-md text-tungning-paper bg-[#3d2311] hover:text-white hover:border-tungning-gold focus:outline-none transition ease-in-out duration-150 shadow-inner">
                             <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-                            
+
                             @if(auth()->user()->isOM())
-                                <span class="ml-2 text-xs bg-red-800 text-white px-1 rounded border border-red-600">總督</span>
+                            <span class="ml-2 text-xs bg-red-800 text-white px-1 rounded border border-red-600">總督</span>
                             @elseif(auth()->user()->isGM())
-                                <span class="ml-2 text-xs bg-tungning-wood text-white px-1 rounded border border-tungning-gold/50">巡查</span>
+                            <span class="ml-2 text-xs bg-tungning-wood text-white px-1 rounded border border-tungning-gold/50">巡查</span>
                             @endif
 
                             <div class="ms-1 text-tungning-gold">
@@ -146,40 +150,44 @@ new class extends Component
 
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-[#3d2311] border-t border-tungning-gold/30">
         <div class="pt-2 pb-3 space-y-1">
-            
+
             @if(request()->is('admin*'))
-                {{-- [後台模式 - 手機版] --}}
-                <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')" wire:navigate>
-                    {{ __('營運總署') }}
-                </x-responsive-nav-link>
+            {{-- [後台模式 - 手機版] --}}
+            <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')" wire:navigate>
+                {{ __('營運總署') }}
+            </x-responsive-nav-link>
 
-                @if(auth()->user()->isGM())
-                    <x-responsive-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')" wire:navigate>
-                        {{ __('戶籍名冊') }}
-                    </x-responsive-nav-link>
+            @if(auth()->user()->isGM())
+            <x-responsive-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')" wire:navigate>
+                {{ __('戶籍名冊') }}
+            </x-responsive-nav-link>
 
-                    <x-responsive-nav-link :href="route('admin.settings')" :active="request()->routeIs('admin.settings')" wire:navigate>
-                        {{ __('府庫規章') }}
-                    </x-responsive-nav-link>
-                @endif
-                
-                <div class="border-t border-tungning-gold/20 my-2"></div>
+            <x-responsive-nav-link :href="route('admin.settings')" :active="request()->routeIs('admin.settings')" wire:navigate>
+                {{ __('府庫規章') }}
+            </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('dashboard')" :active="false" wire:navigate class="text-tungning-gold/70">
-                    {{ __('⬅ 返回府邸') }}
-                </x-responsive-nav-link>
+            <x-nav-link :href="route('admin.avatars')" :active="request()->routeIs('admin.avatars')" wire:navigate>
+                {{ __('人物圖鑑') }}
+            </x-nav-link>
+            @endif
+
+            <div class="border-t border-tungning-gold/20 my-2"></div>
+
+            <x-responsive-nav-link :href="route('dashboard')" :active="false" wire:navigate class="text-tungning-gold/70">
+                {{ __('⬅ 返回府邸') }}
+            </x-responsive-nav-link>
 
             @else
-                {{-- [前台模式 - 手機版] --}}
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                    {{ __('東寧府邸') }}
-                </x-responsive-nav-link>
+            {{-- [前台模式 - 手機版] --}}
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                {{ __('東寧府邸') }}
+            </x-responsive-nav-link>
 
-                @if(auth()->user()->isGM())
-                    <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')" wire:navigate>
-                        {{ __('進入營運總署') }}
-                    </x-responsive-nav-link>
-                @endif
+            @if(auth()->user()->isGM())
+            <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')" wire:navigate>
+                {{ __('進入營運總署') }}
+            </x-responsive-nav-link>
+            @endif
             @endif
 
         </div>

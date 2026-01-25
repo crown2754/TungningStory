@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             GameSettingSeeder::class,
+            AvatarSeeder::class,
         ]);
 
         // 建立預設運營管理員 (OM)

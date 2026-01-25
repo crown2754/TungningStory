@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -32,6 +33,7 @@ class User extends Authenticatable
         'max_stamina',
         'job',
         'role',
+        'avatar_id',
     ];
 
     /**
@@ -58,7 +60,7 @@ class User extends Authenticatable
     }
 
     // --- [修正 3] 定義權限判斷方法 ---
-    
+
     // 判斷是否為運營管理員
     public function isOM(): bool
     {
@@ -69,5 +71,17 @@ class User extends Authenticatable
     public function isGM(): bool
     {
         return in_array($this->role, [self::ROLE_GM, self::ROLE_OM]);
+    }
+
+    // [新增] 關聯頭像
+    public function avatar(): BelongsTo
+    {
+        return $this->belongsTo(Avatar::class);
+    }
+
+    // [新增] 取得頭像網址 (如果沒選就回傳預設圖)
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? $this->avatar->path : '/images/icon.jpg'; // 請確保有無頭像時的預設圖
     }
 }

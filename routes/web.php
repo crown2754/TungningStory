@@ -34,6 +34,8 @@ Route::middleware(['auth', 'admin:GM'])->prefix('admin')->name('admin.')->group(
         Route::get('/users', \App\Livewire\Admin\UserManagement::class)->name('users');
         // [新增] 系統參數設定
         Route::get('/settings', \App\Livewire\Admin\SystemSettings::class)->name('settings');
+        // [新增] 頭像管理
+        Route::get('/avatars', \App\Livewire\Admin\AvatarManagement::class)->name('avatars');
     });
 });
 require __DIR__ . '/auth.php';
