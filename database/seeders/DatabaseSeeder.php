@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +16,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // 建立預設運營管理員 (OM)
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => '運營管理員',
+            'email' => 'service@gkgary.com',
+            'password' => Hash::make('game@1234'), // 建議登入後立即更改
+            'role' => User::ROLE_OM, // 使用模型中定義的常量
+            'gold' => 1000,
+            'stamina' => 100,
+            'max_stamina' => 100,
+            'job' => '平民',
+        ]);
+
+
+        // 也可以建立一個測試用的一般玩家
+        User::factory()->create([
+            'name' => '開拓者一號',
+            'email' => 'player@example.com',
+            'password' => Hash::make('game@1234'), // 建議登入後立即更改
+            'role' => User::ROLE_PLAYER,
+            'gold' => 1000,
+            'stamina' => 100,
+            'max_stamina' => 100,
+            'job' => '平民',
         ]);
     }
 }

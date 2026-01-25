@@ -1,40 +1,64 @@
 <?php
 
+namespace App\Livewire;
+
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
+use Illuminate\Auth\Events\Registered;
+use Livewire\Component;
+use Livewire\Attributes\Validate;
 
-new #[Layout('layouts.guest')] class extends Component
+class AuthSwitcher extends Component
 {
-    public string $name = '';
-    public string $email = '';
-    public string $password = '';
-    public string $password_confirmation = '';
+    public $showLogin = true;
 
-    /**
-     * Handle an incoming registration request.
-     */
-    public function register(): void
+    // 註冊用的屬性
+    #[Validate('required|string|max:255')]
+    public $name = '';
+
+    #[Validate('required|string|lowercase|email|max:255|unique:users')]
+    public $email = '';
+
+    #[Validate('required|string|min:8')]
+    public $password = '';
+
+    public function toggleForm()
     {
-        $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+        $this->showLogin = !$this->showLogin;
+        $this->resetErrorBag();
+    }
+
+    public function register()
+    {
+        $this->validate();
+
+        $user = User::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => Hash::make($this->password),
+            // 東寧物語初始數據
+            'gold' => 1000,
+            'stamina' => 100,
+            'max_stamina' => 100,
+            'job' => '平民',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-
-        event(new Registered($user = User::create($validated)));
+        event(new Registered($user));
 
         Auth::login($user);
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        return $this->redirect(route('dashboard', absolute: false), navigate: true);
     }
-}; ?>
+
+    // 你也可以在此實作 login() 方法...
+
+    public function render()
+    {
+        return view('livewire.auth-switcher');
+    }
+}
+?>
 
 <div>
     <form wire:submit="register">
@@ -57,9 +81,9 @@ new #[Layout('layouts.guest')] class extends Component
             <x-input-label for="password" :value="__('Password')" />
 
             <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+                type="password"
+                name="password"
+                required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
@@ -69,8 +93,8 @@ new #[Layout('layouts.guest')] class extends Component
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
             <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+                type="password"
+                name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
