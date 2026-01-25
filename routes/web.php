@@ -32,6 +32,8 @@ Route::middleware(['auth', 'admin:GM'])->prefix('admin')->name('admin.')->group(
     // [修改] 這裡原本是 admin:OM，改成 admin:GM，讓一般管理員也能進來改數值
     Route::middleware('admin:GM')->group(function () {
         Route::get('/users', \App\Livewire\Admin\UserManagement::class)->name('users');
+        // [新增] 系統參數設定
+        Route::get('/settings', \App\Livewire\Admin\SystemSettings::class)->name('settings');
     });
 });
 require __DIR__ . '/auth.php';

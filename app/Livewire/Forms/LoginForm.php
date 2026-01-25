@@ -33,8 +33,9 @@ class LoginForm extends Form
         if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
+            // [修改] 將 'form.email' 改為 'email'，這樣 Livewire 才能正確捕捉到與欄位對應的錯誤
             throw ValidationException::withMessages([
-                'form.email' => trans('auth.failed'),
+                'email' => trans('auth.failed'),
             ]);
         }
 
@@ -67,6 +68,6 @@ class LoginForm extends Form
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }

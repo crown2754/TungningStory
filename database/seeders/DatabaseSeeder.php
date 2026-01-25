@@ -16,26 +16,42 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+        $this->call([
+            GameSettingSeeder::class,
+        ]);
+
         // 建立預設運營管理員 (OM)
         User::factory()->create([
             'name' => '運營管理員',
             'email' => 'service@gkgary.com',
             'password' => Hash::make('game@1234'), // 建議登入後立即更改
             'role' => User::ROLE_OM, // 使用模型中定義的常量
-            'gold' => 1000,
+            'gold' => 100000,
             'stamina' => 100,
             'max_stamina' => 100,
             'job' => '平民',
         ]);
 
+        // 也可以建立一個測試用的一般玩家
+        User::factory()->create([
+            'name' => '開拓者一號',
+            'email' => 'gm@gkgary.com',
+            'password' => Hash::make('game@1234'), // 建議登入後立即更改
+            'role' => User::ROLE_GM,
+            'gold' => 100000,
+            'stamina' => 100,
+            'max_stamina' => 100,
+            'job' => '平民',
+        ]);
 
         // 也可以建立一個測試用的一般玩家
         User::factory()->create([
             'name' => '開拓者一號',
-            'email' => 'player@example.com',
+            'email' => 'player@gkgary.com',
             'password' => Hash::make('game@1234'), // 建議登入後立即更改
             'role' => User::ROLE_PLAYER,
-            'gold' => 1000,
+            'gold' => 100000,
             'stamina' => 100,
             'max_stamina' => 100,
             'job' => '平民',

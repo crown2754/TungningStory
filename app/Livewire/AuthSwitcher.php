@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\User;
 use App\Livewire\Forms\LoginForm;
+use App\Models\GameSetting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -52,13 +53,18 @@ class AuthSwitcher extends Component
     {
         $this->validate();
 
+        // [修改] 改為讀取 GameSetting，若讀不到則使用後面的預設值 (100000/100/100)
+        $initialGold = (int) GameSetting::get('initial_gold', 100000);
+        $initialStamina = (int) GameSetting::get('initial_stamina', 100);
+        $initialMaxStamina = (int) GameSetting::get('initial_max_stamina', 100);
+
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
-            'gold' => 1000,
-            'stamina' => 100,
-            'max_stamina' => 100,
+            'gold' => $initialGold,           // 使用動態設定
+            'stamina' => $initialStamina,     // 使用動態設定
+            'max_stamina' => $initialMaxStamina, // 使用動態設定
             'job' => '平民',
             'role' => 'Player', // 預設角色為玩家
         ]);
