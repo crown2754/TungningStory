@@ -14,7 +14,7 @@ class ShopIndex extends Component
 {
     public $shopName;
 
-    // [新增] 用來控制 NPC 說什麼話 (預設為空，代表說預設台詞)
+    // 用來控制 NPC 說什麼話
     public $npcSpeech = '';
 
     public function createShop()
@@ -22,7 +22,10 @@ class ShopIndex extends Component
         // 1. 重置對話
         $this->npcSpeech = '';
 
-        // 2. 自訂驗證邏輯 (為了讓錯誤訊息也由 NPC 說出來)
+        // [新增] 定義體力消耗
+        $staminaCost = 20;
+
+        // 2. 自訂驗證邏輯
         try {
             $this->validate([
                 'shopName' => [
@@ -41,18 +44,13 @@ class ShopIndex extends Component
                     },
                 ],
             ], [
-                // [修正] 定義中文錯誤訊息，避免楊英烙英文
                 'shopName.required' => '招牌上空無一字，這可不行。',
                 'shopName.max' => '這名號太長了，匾額刻不下。',
                 'shopName.unique' => '這名號已有人用了。',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // [關鍵] 驗證失敗時，讓楊英說出錯誤原因
-            // 取出第一個錯誤訊息
             $firstError = current($e->errors())[0];
             $this->npcSpeech = "且慢！{$firstError} 請您三思再重新題字。";
-
-            // 重新拋出例外讓前端顯示紅框 (選擇性，或者直接 return)
             throw $e;
         }
 
@@ -62,22 +60,35 @@ class ShopIndex extends Component
         // 3. 檢查錢夠不夠
         if ($user->gold < $cost) {
             $shortage = number_format($cost - $user->gold);
-            // [關鍵] 沒錢的時候楊英說的話
             $this->npcSpeech = "這位大人... 您的盤纏似乎還差了 {$shortage} 文。庫房規矩森嚴，恕在下無法通融。";
             return;
         }
 
-        // 4. 執行交易
-        DB::transaction(function () use ($user, $cost) {
+        // [新增] 4. 檢查體力夠不夠
+        if ($user->stamina < $staminaCost) {
+            $this->npcSpeech = "這位大人，經營商號可是件耗費心力的差事。我看您現在精神不濟（體力不足 {$staminaCost}），不如先去歇息片刻，養精蓄銳再來畫押吧？";
+            return;
+        }
+
+        // 5. 執行交易
+        DB::transaction(function () use ($user, $cost, $staminaCost) {
             $user = \App\Models\User::where('id', $user->id)->lockForUpdate()->first();
 
-            // 二次防禦
+            // 二次防禦 (錢)
             if ($user->gold < $cost) {
                 $this->npcSpeech = "這位大人... 您的銀兩似乎不夠啊。";
                 return;
             };
 
+            // [新增] 二次防禦 (體力)
+            if ($user->stamina < $staminaCost) {
+                $this->npcSpeech = "這位大人... 您看起來快暈倒了，快去休息吧。";
+                return;
+            };
+
+            // 扣除金幣與體力
             $user->decrement('gold', $cost);
+            $user->decrement('stamina', $staminaCost); // [新增]
 
             Shop::create([
                 'user_id' => $user->id,
@@ -90,12 +101,17 @@ class ShopIndex extends Component
             AuditLog::create([
                 'user_id' => $user->id,
                 'action' => 'CREATE_SHOP',
-                'description' => "花費 {$cost} 文盤下了商號：{$this->shopName}",
-                'changes' => ['cost' => $cost, 'shop_name' => $this->shopName],
+                // [修改] 紀錄中加入體力消耗描述
+                'description' => "花費 {$cost} 文與 {$staminaCost} 點體力，盤下了商號：{$this->shopName}",
+                'changes' => [
+                    'cost' => $cost,
+                    'stamina_cost' => $staminaCost, // [新增]
+                    'shop_name' => $this->shopName
+                ],
             ]);
         });
 
-        // 5. 成功後的祝賀詞
+        // 6. 成功後的祝賀詞
         $this->npcSpeech = "恭喜大人！手續已辦妥，這間「{$this->shopName}」現在是您的了。願您生意興隆，富甲一方！";
     }
 
