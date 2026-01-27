@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             GameSettingSeeder::class,
             AvatarSeeder::class,
+            NpcSeeder::class,
         ]);
 
         // 建立預設運營管理員 (OM)
@@ -36,7 +37,7 @@ class DatabaseSeeder extends Seeder
 
         // 也可以建立一個測試用的一般玩家
         User::factory()->create([
-            'name' => '開拓者一號',
+            'name' => '開拓者GM一號',
             'email' => 'gm@gkgary.com',
             'password' => Hash::make('game@1234'), // 建議登入後立即更改
             'role' => User::ROLE_GM,
@@ -48,7 +49,7 @@ class DatabaseSeeder extends Seeder
 
         // 也可以建立一個測試用的一般玩家
         User::factory()->create([
-            'name' => '開拓者一號',
+            'name' => '開拓者玩家一號',
             'email' => 'player@gkgary.com',
             'password' => Hash::make('game@1234'), // 建議登入後立即更改
             'role' => User::ROLE_PLAYER,

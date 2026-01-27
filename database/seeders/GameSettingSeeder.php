@@ -40,6 +40,12 @@ class GameSettingSeeder extends Seeder
                 'name' => '後台標誌 (Logo)',
                 'description' => '顯示於管理後台左上角的圖示',
             ],
+            [
+                'key' => 'shop_creation_fee',
+                'value' => '10000',
+                'name' => '商號盤讓費',
+                'description' => '玩家開設第一間商號所需支付的通寶',
+            ],
         ];
 
         foreach ($settings as $setting) {

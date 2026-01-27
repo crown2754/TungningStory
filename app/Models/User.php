@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -83,5 +84,17 @@ class User extends Authenticatable
     public function getAvatarUrlAttribute()
     {
         return $this->avatar ? $this->avatar->path : '/images/icon.jpg'; // 請確保有無頭像時的預設圖
+    }
+
+    // [新增] 玩家擁有的商號
+    public function shop(): HasOne
+    {
+        return $this->hasOne(Shop::class);
+    }
+
+    // 檢查是否有店
+    public function hasShop(): bool
+    {
+        return $this->shop()->exists();
     }
 }

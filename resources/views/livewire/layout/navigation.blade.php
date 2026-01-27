@@ -42,7 +42,6 @@ new class extends Component
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ request()->is('admin*') ? route('admin.index') : route('dashboard') }}" wire:navigate>
-
                         @if($logoUrl)
                         <img src="{{ $logoUrl }}"
                             class="block h-10 w-auto drop-shadow-md hover:scale-105 transition duration-300 object-contain"
@@ -50,7 +49,6 @@ new class extends Component
                         @else
                         <x-application-logo class="block h-10 w-auto fill-current text-tungning-gold drop-shadow-md" />
                         @endif
-
                     </a>
                 </div>
 
@@ -74,6 +72,10 @@ new class extends Component
                     <x-nav-link :href="route('admin.avatars')" :active="request()->routeIs('admin.avatars')" wire:navigate>
                         {{ __('人物圖鑑') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('admin.npcs')" :active="request()->routeIs('admin.npcs')" wire:navigate>
+                        {{ __('NPC名冊') }}
+                    </x-nav-link>
                     @endif
 
                     {{-- 分隔線 --}}
@@ -87,9 +89,35 @@ new class extends Component
 
                     @else
                     {{-- [前台模式] --}}
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('東寧府邸') }}
-                    </x-nav-link>
+
+                    <div class="hidden sm:flex sm:items-center">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-tungning-paper/70 hover:text-white hover:border-tungning-gold/50 focus:outline-none focus:text-white transition duration-150 ease-in-out h-16">
+                                    <span>{{ __('本家') }}</span>
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <div class="bg-tungning-paper border border-tungning-wood rounded-md overflow-hidden">
+                                    <x-dropdown-link :href="route('dashboard')" wire:navigate class="text-tungning-brown hover:bg-tungning-gold/20 font-bold">
+                                        {{ __('據點總覽') }}
+                                    </x-dropdown-link>
+
+                                    <x-dropdown-link :href="route('shop.index')" wire:navigate class="text-tungning-brown hover:bg-tungning-gold/20 font-bold">
+                                        {{ __('我的商號') }}
+                                    </x-dropdown-link>
+                                </div>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+
+                    {{-- 您可以在這裡繼續加其他的 x-nav-link (如市集、地圖) --}}
 
                     @if(auth()->user()->isGM())
                     <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')" wire:navigate>
@@ -171,8 +199,12 @@ new class extends Component
                 {{ __('府庫規章') }}
             </x-responsive-nav-link>
 
-            <x-nav-link :href="route('admin.avatars')" :active="request()->routeIs('admin.avatars')" wire:navigate>
+            <x-responsive-nav-link :href="route('admin.avatars')" :active="request()->routeIs('admin.avatars')" wire:navigate>
                 {{ __('人物圖鑑') }}
+            </x-responsive-nav-link>
+
+            <x-nav-link :href="route('admin.npcs')" :active="request()->routeIs('admin.npcs')" wire:navigate>
+                {{ __('NPC名冊') }}
             </x-nav-link>
             @endif
 
@@ -184,9 +216,18 @@ new class extends Component
 
             @else
             {{-- [前台模式 - 手機版] --}}
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                {{ __('東寧府邸') }}
-            </x-responsive-nav-link>
+
+            <div class="border-l-4 border-tungning-gold ml-2 pl-2 my-2">
+                <div class="text-xs text-tungning-gold/50 font-bold mb-1 ml-2">本家</div>
+
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    {{ __('據點總覽') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('shop.index')" :active="request()->routeIs('shop.*')" wire:navigate>
+                    {{ __('我的商號') }}
+                </x-responsive-nav-link>
+            </div>
 
             @if(auth()->user()->isGM())
             <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')" wire:navigate>
