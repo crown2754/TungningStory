@@ -105,6 +105,11 @@ new class extends Component
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-4 py-2 border border-tungning-gold/30 text-sm leading-4 font-bold rounded-md text-tungning-paper bg-[#3d2311] hover:text-white hover:border-tungning-gold focus:outline-none transition ease-in-out duration-150 shadow-inner">
+
+                            <img src="{{ auth()->user()->avatar_url }}"
+                                class="h-8 w-8 rounded object-cover border border-tungning-gold mr-2 bg-gray-800"
+                                alt="Avatar">
+
                             <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
 
                             @if(auth()->user()->isOM())
