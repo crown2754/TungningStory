@@ -24,7 +24,7 @@
                                 </a>
                                 
                                 <a href="#" class="block p-3 rounded text-tungning-wood/50 cursor-not-allowed flex items-center">
-                                    <span class="mr-2">💰</span> 國庫賑災 (籌備中)
+                                    <span class="mr-2">文</span> 國庫賑災 (籌備中)
                                 </a>
                             @endif
                         </div>

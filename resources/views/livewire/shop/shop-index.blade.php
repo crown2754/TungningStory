@@ -76,7 +76,7 @@
                             📦 貨架管理
                         </button>
                         <button class="btn bg-[#e8e0d5] text-tungning-brown border-2 border-tungning-wood hover:bg-white">
-                            💰 帳本查看
+                            文 帳本查看
                         </button>
                     </div>
                 </div>
