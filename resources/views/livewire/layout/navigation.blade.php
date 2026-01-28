@@ -55,7 +55,7 @@ new class extends Component
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
 
                     @if(request()->is('admin*'))
-                    {{-- [後台模式] --}}
+                    {{-- [後台模式 - 桌面版] --}}
                     <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')" wire:navigate>
                         {{ __('營運總署') }}
                     </x-nav-link>
@@ -67,6 +67,10 @@ new class extends Component
 
                     <x-nav-link :href="route('admin.settings')" :active="request()->routeIs('admin.settings')" wire:navigate>
                         {{ __('府庫規章') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('admin.items')" :active="request()->routeIs('admin.items')" wire:navigate>
+                        {{ __('物資總署') }}
                     </x-nav-link>
 
                     <x-nav-link :href="route('admin.avatars')" :active="request()->routeIs('admin.avatars')" wire:navigate>
@@ -88,8 +92,9 @@ new class extends Component
                     </x-nav-link>
 
                     @else
-                    {{-- [前台模式] --}}
+                    {{-- [前台模式 - 桌面版] --}}
 
+                    {{-- 1. 本家選單 --}}
                     <div class="hidden sm:flex sm:items-center">
                         <x-dropdown align="left" width="48">
                             <x-slot name="trigger">
@@ -117,7 +122,29 @@ new class extends Component
                         </x-dropdown>
                     </div>
 
-                    {{-- 您可以在這裡繼續加其他的 x-nav-link (如市集、地圖) --}}
+                    {{-- 2. [新增] 承天府 (地圖) 選單 --}}
+                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-tungning-paper/70 hover:text-white hover:border-tungning-gold/50 focus:outline-none focus:text-white transition duration-150 ease-in-out h-16">
+                                    <span>{{ __('承天府') }}</span>
+                                    <div class="ms-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 fill-current" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M15 21h-2v-2h2v2zm4 0h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2v-2h2v2zm-4 4h-2v-2h2v2zm-4 4H9v-2h2v2zm-4 0H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5v-2h2v2zm4 4H9v-2h2v2zm8-11.17V5.83V3H5v2.83v1.34l7 3.5 7-3.5zM5 19v-2h14v2H5z" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <div class="bg-tungning-paper border border-tungning-wood rounded-md overflow-hidden">
+                                    <x-dropdown-link :href="route('market')" wire:navigate class="text-tungning-brown hover:bg-tungning-gold/20 font-bold flex items-center gap-2">
+                                        <span>🏮</span> {{ __('大井頭市集') }}
+                                    </x-dropdown-link>
+                                </div>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
 
                     @if(auth()->user()->isGM())
                     <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')" wire:navigate>
@@ -181,6 +208,7 @@ new class extends Component
         </div>
     </div>
 
+    {{-- 手機版選單區域 --}}
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-[#3d2311] border-t border-tungning-gold/30">
         <div class="pt-2 pb-3 space-y-1">
 
@@ -199,13 +227,17 @@ new class extends Component
                 {{ __('府庫規章') }}
             </x-responsive-nav-link>
 
+            <x-responsive-nav-link :href="route('admin.items')" :active="request()->routeIs('admin.items')" wire:navigate>
+                {{ __('物資總署') }}
+            </x-responsive-nav-link>
+
             <x-responsive-nav-link :href="route('admin.avatars')" :active="request()->routeIs('admin.avatars')" wire:navigate>
                 {{ __('人物圖鑑') }}
             </x-responsive-nav-link>
 
-            <x-nav-link :href="route('admin.npcs')" :active="request()->routeIs('admin.npcs')" wire:navigate>
+            <x-responsive-nav-link :href="route('admin.npcs')" :active="request()->routeIs('admin.npcs')" wire:navigate>
                 {{ __('NPC名冊') }}
-            </x-nav-link>
+            </x-responsive-nav-link>
             @endif
 
             <div class="border-t border-tungning-gold/20 my-2"></div>
@@ -226,6 +258,15 @@ new class extends Component
 
                 <x-responsive-nav-link :href="route('shop.index')" :active="request()->routeIs('shop.*')" wire:navigate>
                     {{ __('我的商號') }}
+                </x-responsive-nav-link>
+            </div>
+
+            {{-- [新增] 承天府 (地圖) 手機版 --}}
+            <div class="border-l-4 border-red-800 ml-2 pl-2 my-2">
+                <div class="text-xs text-red-800/70 font-bold mb-1 ml-2">承天府 (地圖)</div>
+
+                <x-responsive-nav-link :href="route('market')" :active="request()->routeIs('market')" wire:navigate>
+                    🏮 {{ __('大井頭市集') }}
                 </x-responsive-nav-link>
             </div>
 

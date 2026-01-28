@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             GameSettingSeeder::class,
             AvatarSeeder::class,
             NpcSeeder::class,
+            ItemSeeder::class,
         ]);
 
         // 建立預設運營管理員 (OM)
