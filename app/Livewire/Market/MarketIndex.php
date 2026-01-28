@@ -25,6 +25,36 @@ class MarketIndex extends Component
         'guo'  => ['稻米', '臘肉', '白酒'],
     ];
 
+    // [新增] NPC 的閒聊語錄
+    protected $idleChats = [
+        'qing' => [
+            '「這批茶葉可是極品，這幾天洋人都搶著要呢！」',
+            '「您可以隨便看看，但別打破東西啊，那瓷器很貴的。」',
+            '「最近海上風浪大，生意不好做啊...」',
+            '「要出海嗎？帶個堅固的水槽才安心。」',
+            '「聽說南邊又來了幾艘商船，不知道帶了什麼好貨？」',
+        ],
+        'guo' => [
+            '「多吃點肉，才有力氣幹活。」',
+            '「這酒雖然烈，但在海上可是驅寒的寶貝。」',
+            '「年輕人，存糧就是存命，多備點總是沒錯的。」',
+            '「看天吃飯不容易啊，今年的稻米粒粒皆辛苦。」',
+            '「想當年我也跟隨國姓爺... 咳咳，沒事，老毛病了。」',
+        ]
+    ];
+
+    // [新增] 點擊頭像觸發閒聊
+    public function talkToNpc()
+    {
+        if (!$this->activeMerchant) return;
+
+        $this->bubbleShake++; // 讓氣泡搖晃一下，增加互動感
+
+        // 隨機挑選一句閒聊
+        $lines = $this->idleChats[$this->activeMerchant] ?? ['「隨便看看。」'];
+        $this->greetingMessage = $lines[array_rand($lines)];
+    }
+
     // 初始化：進入商店 (直接顯示商品)
     public function enterShop($merchantKey)
     {
@@ -32,14 +62,12 @@ class MarketIndex extends Component
         $this->cart = [];
         $this->showReceipt = false;
 
-        // 根據 NPC 給出歡迎詞
         if ($merchantKey == 'qing') {
             $this->greetingMessage = '「喲！稀客啊，來看看剛到岸的好貨！」';
         } else {
             $this->greetingMessage = '「年輕人，肚子餓了嗎？來買點糧食吧。」';
         }
 
-        // 初始化購物車
         $items = $this->getShopItemsProperty();
         foreach ($items as $item) {
             $this->cart[$item->id] = 0;

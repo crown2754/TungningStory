@@ -90,8 +90,15 @@
             <div class="bg-[#f3f0eb] border-4 border-tungning-brown rounded-xl p-6 mb-8 shadow-xl relative overflow-hidden">
                 <div class="flex flex-col md:flex-row items-center gap-6 relative z-10">
 
-                    {{-- NPC 頭像 --}}
-                    <div class="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 border-4 border-tungning-gold rounded-full overflow-hidden shadow-md bg-gray-300">
+                    {{-- NPC 頭像 (修改處：加上 cursor-pointer 與 wire:click) --}}
+                    <div wire:click="talkToNpc"
+                        class="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 border-4 border-tungning-gold rounded-full overflow-hidden shadow-md bg-gray-300 cursor-pointer hover:scale-105 transition-transform active:scale-95 group relative">
+
+                        {{-- 加上一個小的提示圖示 --}}
+                        <div class="absolute bottom-0 right-0 bg-white/80 text-xs px-1 rounded-tl opacity-0 group-hover:opacity-100 transition-opacity font-bold text-tungning-brown">
+                            💬 攀談
+                        </div>
+
                         @php $currentNpc = ($activeMerchant == 'qing') ? $npcQing : $npcGuo; @endphp
                         @if($currentNpc && $currentNpc->avatar)
                         <img src="{{ $currentNpc->avatar->path }}" class="w-full h-full object-cover">
