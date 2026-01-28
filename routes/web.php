@@ -17,6 +17,7 @@ Route::view('profile', 'profile')
 // [修正] 商號是給玩家用的，要放在外面，並加上 auth (登入才能用) 的保護
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/shop', \App\Livewire\Shop\ShopIndex::class)->name('shop.index');
+    Route::get('/market', \App\Livewire\Market\MarketIndex::class)->name('market');
 });
 
 
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'admin:GM'])->prefix('admin')->name('admin.')->group(
     Route::get('/settings', \App\Livewire\Admin\SystemSettings::class)->name('settings');
     Route::get('/avatars', \App\Livewire\Admin\AvatarManagement::class)->name('avatars');
     Route::get('/npcs', \App\Livewire\Admin\NpcManagement::class)->name('npcs');
+    Route::get('/items', \App\Livewire\Admin\ItemManagement::class)->name('items');
 });
 
 require __DIR__ . '/auth.php';
