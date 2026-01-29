@@ -69,7 +69,7 @@
 
                             {{-- 數量標籤 --}}
                             <div class="absolute top-0 right-0 bg-tungning-brown text-white text-xs font-bold px-2 py-1 rounded-bl">
-                                x{{ number_format($slot->quantity) }}
+                                x{{ number_format($slot->quantity) }} {{ $slot->item->unit }}
                             </div>
 
                             {{-- Tooltip --}}

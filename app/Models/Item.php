@@ -13,6 +13,7 @@ class Item extends Model
         'name',
         'description',
         'type',
+        'unit',
         'image_path',
         'base_price',
         'min_price',

@@ -145,20 +145,28 @@
                         </div>
 
                         <div class="flex gap-4">
-                            <div class="w-20 h-20 bg-gray-200 border border-gray-400 rounded flex items-center justify-center text-4xl shadow-inner shrink-0">
-                                @if(str_contains($item->name, '茶')) 🍵
-                                @elseif(str_contains($item->name, '米')) 🍚
-                                @elseif(str_contains($item->name, '酒')) 🍶
-                                @elseif(str_contains($item->name, '甕')) 🏺
-                                @elseif(str_contains($item->name, '肉')) 🥓
-                                @elseif(str_contains($item->name, '木')) 🪵
-                                @else 📦
+                            {{-- 物品圖片 --}}
+                            <div class="w-24 h-24 bg-gray-200 border border-gray-400 rounded-lg flex items-center justify-center overflow-hidden shadow-inner shrink-0 relative">
+                                @if($item->image_path)
+                                <img src="{{ asset($item->image_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                @else
+                                {{-- 沒圖片時的 Fallback Emoji (保留原本邏輯作為備案) --}}
+                                <div class="text-4xl">
+                                    @if(str_contains($item->name, '茶')) 🍵
+                                    @elseif(str_contains($item->name, '米')) 🍚
+                                    @elseif(str_contains($item->name, '酒')) 🍶
+                                    @elseif(str_contains($item->name, '甕')) 🏺
+                                    @elseif(str_contains($item->name, '肉')) 🥓
+                                    @elseif(str_contains($item->name, '木')) 🪵
+                                    @else 📦
+                                    @endif
+                                </div>
                                 @endif
                             </div>
                             <div>
                                 <h4 class="font-black text-xl text-gray-800">{{ $item->name }}</h4>
                                 <div class="text-lg font-bold text-red-800 mt-2">
-                                    {{ number_format($item->current_price) }} 文
+                                    {{ number_format($item->current_price) }} 文/ {{ $item->unit }}
                                 </div>
                             </div>
                         </div>
