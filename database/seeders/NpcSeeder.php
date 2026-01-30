@@ -83,5 +83,17 @@ class NpcSeeder extends Seeder
             'location' => '',
             'is_active' => true,
         ]);
+
+        $kamachatAvatar = Avatar::where('name', 'Kamachat')->first();
+        Npc::create([
+            'name' => '卡瑪恰', // 取自大肚王名諱變體，帶有部族勇士的榮耀感
+            'title' => '白晝之鹿', // 象徵他在森林中狩獵的高超技藝
+            'description' => '大肚王國的精銳獵手，身上有著部族的榮耀紋面。負責與漢人、紅毛番進行鹿皮貿易，但始終保持著警戒。他的箭術在森林中無人能敵。',
+            'greeting' => '停下，外鄉人。這裡是大肚王的獵場。如果你是來搶地盤的，我的箭不長眼；但如果你是來買上好的鹿皮，我們或許可以談談。',
+            'avatar_id' => $kamachatAvatar?->id, // 綁定對應的頭像變數
+            'location' => 'middag_forest_border', // 建議位置：大肚王國森林邊界 / 或者是 鹿場交易所
+            'is_active' => true,
+        ]);
+        
     }
 }
