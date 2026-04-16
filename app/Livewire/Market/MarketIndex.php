@@ -43,6 +43,28 @@ class MarketIndex extends Component
         ]
     ];
 
+    // [新增] 集中管理所有 NPC 的情境對話
+    protected $merchantDialogues = [
+        'qing' => [
+            'enter'       => '「喲！稀客啊，來看看剛到岸的好貨！」',
+            'add_to_cart' => '「眼光真好，這可是搶手貨！」',
+            'no_stock'    => '「哎呀！這貨太搶手已經賣光了，下次請早！」',
+            'no_money'    => '「客官，小本生意概不賒帳，您這銀兩不夠啊...」',
+            'no_stamina'  => '「我看您臉色發白，還是先去休息吧，別暈在我店裡！」',
+            'empty_cart'  => '「您還沒挑東西呢，別跟我開玩笑了。」',
+            'success'     => '「謝啦！下次有新貨再通知您，慢走！」',
+        ],
+        'guo' => [
+            'enter'       => '「年輕人，肚子餓了嗎？來買點糧食吧。」',
+            'add_to_cart' => '「這東西實在，多買點好。」',
+            'no_stock'    => '「地裡還沒長出來呢，這東西暫時沒了。」',
+            'no_money'    => '「年輕人，要腳踏實地，沒錢是買不了東西的。」',
+            'no_stamina'  => '「身子骨要緊，累了就快去歇息，別硬撐。」',
+            'empty_cart'  => '「籃子是空的，想買什麼儘管拿。」',
+            'success'     => '「好好吃飯，有力氣才能建設東寧。」',
+        ]
+    ];
+
     // [新增] 點擊頭像觸發閒聊
     public function talkToNpc()
     {
@@ -62,11 +84,7 @@ class MarketIndex extends Component
         $this->cart = [];
         $this->showReceipt = false;
 
-        if ($merchantKey == 'qing') {
-            $this->greetingMessage = '「喲！稀客啊，來看看剛到岸的好貨！」';
-        } else {
-            $this->greetingMessage = '「年輕人，肚子餓了嗎？來買點糧食吧。」';
-        }
+        $this->greetingMessage = $this->merchantDialogues[$merchantKey]['enter'] ?? '「歡迎光臨。」';
 
         $items = $this->getShopItemsProperty();
         foreach ($items as $item) {
@@ -87,49 +105,9 @@ class MarketIndex extends Component
     {
         $this->bubbleShake++; // 觸發前端氣泡搖晃動畫
 
-        if ($this->activeMerchant == 'qing') {
-            // 水仔阿慶 (市儈、活潑)
-            switch ($type) {
-                case 'no_stock':
-                    $this->greetingMessage = '「哎呀！這貨太搶手已經賣光了，下次請早！」';
-                    break;
-                case 'no_money':
-                    $this->greetingMessage = '「客官，小本生意概不賒帳，您這銀兩不夠啊...」';
-                    break;
-                case 'no_stamina':
-                    $this->greetingMessage = '「我看您臉色發白，還是先去休息吧，別暈在我店裡！」';
-                    break;
-                case 'empty_cart':
-                    $this->greetingMessage = '「您還沒挑東西呢，別跟我開玩笑了。」';
-                    break;
-                case 'success':
-                    $this->greetingMessage = '「謝啦！下次有新貨再通知您，慢走！」';
-                    break;
-                default:
-                    $this->greetingMessage = $type;
-            }
-        } else {
-            // 郭老爹 (穩重、長輩口吻)
-            switch ($type) {
-                case 'no_stock':
-                    $this->greetingMessage = '「地裡還沒長出來呢，這東西暫時沒了。」';
-                    break;
-                case 'no_money':
-                    $this->greetingMessage = '「年輕人，要腳踏實地，沒錢是買不了東西的。」';
-                    break;
-                case 'no_stamina':
-                    $this->greetingMessage = '「身子骨要緊，累了就快去歇息，別硬撐。」';
-                    break;
-                case 'empty_cart':
-                    $this->greetingMessage = '「籃子是空的，想買什麼儘管拿。」';
-                    break;
-                case 'success':
-                    $this->greetingMessage = '「好好吃飯，有力氣才能建設東寧。」';
-                    break;
-                default:
-                    $this->greetingMessage = $type;
-            }
-        }
+        // 從對話庫中取得對應的回應，如果沒有設定，則預設印出 type 的名稱作為 Fallback
+        $dialogues = $this->merchantDialogues[$this->activeMerchant] ?? [];
+        $this->greetingMessage = $dialogues[$type] ?? $type;
     }
 
     public function getShopItemsProperty()
@@ -172,7 +150,7 @@ class MarketIndex extends Component
         if ($this->cart[$itemId] < $item->stock) {
             $this->cart[$itemId]++;
             // 恢復一般對話
-            $this->greetingMessage = $this->activeMerchant == 'qing' ? '「眼光真好，這可是搶手貨！」' : '「這東西實在，多買點好。」';
+            $this->npcSpeak('add_to_cart');
         } else {
             $this->npcSpeak('no_stock');
         }
