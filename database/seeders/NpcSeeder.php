@@ -84,7 +84,7 @@ class NpcSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        $kamachatAvatar = Avatar::where('name', 'Kamachat')->first();
+        $kamachatAvatar = Avatar::where('name', '07Kamachat')->first();
         Npc::create([
             'name' => '卡瑪恰', // 取自大肚王名諱變體，帶有部族勇士的榮耀感
             'title' => '白晝之鹿', // 象徵他在森林中狩獵的高超技藝
