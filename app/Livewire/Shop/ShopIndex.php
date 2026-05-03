@@ -115,6 +115,18 @@ class ShopIndex extends Component
         $this->npcSpeech = "恭喜大人！手續已辦妥，這間「{$this->shopName}」現在是您的了。願您生意興隆，富甲一方！";
     }
 
+    public function toggleShopStatus()
+    {
+        $shop = Auth::user()->shop;
+        if ($shop) {
+            $shop->is_open = !$shop->is_open;
+            $shop->save();
+            
+            $status = $shop->is_open ? '開張營業' : '打烊休息';
+            $this->npcSpeech = "好的，商號已經{$status}了！";
+        }
+    }
+
     public function render()
     {
         $user = Auth::user();

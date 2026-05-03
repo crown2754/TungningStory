@@ -27,6 +27,14 @@
                                     <span class="mr-2">文</span> 國庫賑災 (籌備中)
                                 </a>
                             @endif
+
+                            <a href="{{ route('admin.stock-monitor') }}" class="block p-3 mb-2 rounded hover:bg-tungning-gold/20 text-tungning-brown font-bold transition flex items-center">
+                                <span class="mr-2">📊</span> 物資庫存監控
+                            </a>
+
+                            <a href="{{ route('admin.government') }}" class="block p-3 mb-2 rounded hover:bg-tungning-gold/20 text-tungning-brown font-bold transition flex items-center">
+                                <span class="mr-2">🏛️</span> 承天府政務
+                            </a>
                         </div>
                     </div>
                 </div>

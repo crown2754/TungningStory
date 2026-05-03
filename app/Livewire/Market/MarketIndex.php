@@ -3,8 +3,10 @@
 namespace App\Livewire\Market;
 
 use App\Models\Item;
+use App\Models\Government;
 use App\Models\Inventory;
 use App\Models\Npc;
+use App\Models\ShopOrder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -146,14 +148,12 @@ class MarketIndex extends Component
     public function increment($itemId)
     {
         $item = Item::find($itemId);
-        // [修改] 錯誤直接由 NPC 說出
-        if ($this->cart[$itemId] < $item->stock) {
+        // 檢查的是民間康存，因為大井頭市集是民間商人，不是官府
+        if ($this->cart[$itemId] < $item->civilian_stock) {
             $this->cart[$itemId]++;
-            // 恢復一般對話
             $this->npcSpeak('add_to_cart');
-        } else {
-            $this->npcSpeak('no_stock');
         }
+        // 到達上限時靜默忽略，不呼叫 npcSpeak 避免重新渲染導致輸入框狀態混亂
     }
 
     public function decrement($itemId)
@@ -161,6 +161,20 @@ class MarketIndex extends Component
         if ($this->cart[$itemId] > 0) {
             $this->cart[$itemId]--;
         }
+    }
+
+    /**
+     * Livewire 生命週期鉤子：當 $cart 任何元素被更新時觸發
+     * 場景：玩家直接在輸入框輸入數字
+     * $key 就是 item_id，$value 就是玩家輸入的數量
+     */
+    public function updatedCart($value, $key): void
+    {
+        $item = Item::find($key);
+        if (!$item) return;
+
+        // 將輸入夹限在 [0, 民間庫存] 之間，安全防止超買
+        $this->cart[$key] = max(0, min((int) $value, $item->civilian_stock));
     }
 
     public function previewCheckout()
@@ -207,18 +221,42 @@ class MarketIndex extends Component
             $user->decrement('stamina', 15);
             $user->decrement('gold', $summary['totalGold']);
 
+            $gov = Government::current();
+            $taxRate = (float) $gov->tax_rate;
+            $taxAmount = $gov->calculateTaxAmount($summary['totalGold']);
+            if ($taxAmount > 0) {
+                Government::where('id', $gov->id)->lockForUpdate()->first()?->increment('treasury', $taxAmount);
+            }
+
             foreach ($summary['details'] as $detail) {
                 $item = $detail['item'];
                 $qty = $detail['qty'];
 
                 $itemLock = Item::where('id', $item->id)->lockForUpdate()->first();
-                $itemLock->decrement('stock', $qty);
+                // 大井頭市集是民間商人，應從民間數量扣除，官府庫存獨立不受影響
+                $itemLock->decrement('civilian_stock', $qty);
 
                 $inventory = Inventory::where('user_id', $user->id)->where('item_id', $item->id)->first();
                 if ($inventory) {
                     $inventory->increment('quantity', $qty);
                 } else {
                     Inventory::create(['user_id' => $user->id, 'item_id' => $item->id, 'quantity' => $qty]);
+                }
+
+                // 報錄進營業帳本
+                if ($user->shop) {
+                    $merchantName = $this->activeMerchant === 'qing' ? '阿慶' : '郭老爹';
+                    ShopOrder::create([
+                        'shop_id' => $user->shop->id,
+                        'item_id' => $item->id,
+                        'type' => 'purchase',
+                        'buyer_name' => "進貨 ({$merchantName})",
+                        'quantity' => $qty,
+                        'price' => $detail['price'],
+                        'total_amount' => $detail['subtotal'],
+                        'tax_rate' => $taxRate,
+                        'tax_amount' => $gov->calculateTaxAmount((int) $detail['subtotal']),
+                    ]);
                 }
             }
         });

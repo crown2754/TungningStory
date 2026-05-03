@@ -12,3 +12,8 @@ Artisan::command('inspire', function () {
 Schedule::command('game:restore-stamina')
     ->everyFifteenMinutes() // 設定頻率：每 15 分鐘
     ->runInBackground();    // 背景執行 (避免卡住其他排程)
+
+// [新增] 市場模擬排程 (市民購買與官府採買)
+Schedule::command('game:simulate-market')
+    ->everyMinute()
+    ->runInBackground();

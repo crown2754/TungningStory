@@ -64,20 +64,20 @@
                     <h3 class="text-3xl font-black text-tungning-brown mb-2 tracking-widest">{{ $shop->name }}</h3>
                     <p class="text-tungning-wood font-bold mb-6 text-lg">{{ $shop->description }}</p>
 
-                    <div class="badge badge-lg mb-8 p-4 font-bold shadow-md border-2
+                    <div wire:click="toggleShopStatus" class="badge badge-lg mb-8 p-4 font-bold shadow-md border-2 cursor-pointer transition transform hover:scale-105
                     {{ $shop->is_open 
-                        ? 'bg-green-800 text-amber-100 border-green-950'  
-                        : 'bg-stone-600 text-gray-300 border-stone-800'   
+                        ? 'bg-green-800 text-amber-100 border-green-950 hover:bg-green-700'  
+                        : 'bg-stone-600 text-gray-300 border-stone-800 hover:bg-stone-500'   
                     }}">
-                        {{ $shop->is_open ? '營業中' : '休息中' }}
+                        {{ $shop->is_open ? '🈺 營業中 (點擊休息)' : '💤 休息中 (點擊開張)' }}
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                        <button class="btn bg-tungning-brown text-tungning-paper border-2 border-tungning-gold hover:bg-tungning-wood">
+                        <a href="{{ route('shop.manage') }}" wire:navigate class="btn bg-tungning-brown text-tungning-paper border-2 border-tungning-gold hover:bg-tungning-wood">
                             📦 貨架管理
-                        </button>
-                        <button class="btn bg-[#e8e0d5] text-tungning-brown border-2 border-tungning-wood hover:bg-white">
+                        </a>
+                        <a href="{{ route('shop.ledger') }}" wire:navigate class="btn bg-[#e8e0d5] text-tungning-brown border-2 border-tungning-wood hover:bg-white">
                             文 帳本查看
-                        </button>
+                        </a>
                     </div>
                 </div>
                 @else

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -32,6 +33,7 @@ class User extends Authenticatable
         'gold',
         'stamina',
         'max_stamina',
+        'inventory_capacity',
         'job',
         'role',
         'avatar_id',
@@ -96,5 +98,11 @@ class User extends Authenticatable
     public function hasShop(): bool
     {
         return $this->shop()->exists();
+    }
+
+    // [新增] 玩家的背包/倉庫
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(Inventory::class);
     }
 }

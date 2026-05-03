@@ -29,6 +29,12 @@ class GameSettingSeeder extends Seeder
                 'description' => '新註冊玩家的體力最大值',
             ],
             [
+                'key' => 'initial_inventory_capacity',
+                'value' => '1000',
+                'name' => '玩家初始倉庫容量',
+                'description' => '新註冊玩家預設的物資存放上限 (總數量)',
+            ],
+            [
                 'key' => 'stamina_recovery_amount',
                 'value' => '15',
                 'name' => '每次體力恢復量',
@@ -45,6 +51,12 @@ class GameSettingSeeder extends Seeder
                 'value' => '10000',
                 'name' => '商號盤讓費',
                 'description' => '玩家開設第一間商號所需支付的通寶',
+            ],
+            [
+                'key' => 'market_purchase_multiplier',
+                'value' => '1.0',
+                'name' => '市場買氣倍率 (難易度)',
+                'description' => '影響市民購買的機率與數量。1.0為正常，大於1表示市場繁榮(容易賣出)，小於1表示經濟蕭條(難以賣出)。',
             ],
         ];
 

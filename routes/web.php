@@ -6,7 +6,7 @@ Route::view('/', 'welcome');
 
 // --- 玩家區域 (前台) ---
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -17,7 +17,10 @@ Route::view('profile', 'profile')
 // [修正] 商號是給玩家用的，要放在外面，並加上 auth (登入才能用) 的保護
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/shop', \App\Livewire\Shop\ShopIndex::class)->name('shop.index');
+    Route::get('/shop/manage', \App\Livewire\Shop\ShopManagement::class)->name('shop.manage');
+    Route::get('/shop/ledger', \App\Livewire\Shop\ShopLedger::class)->name('shop.ledger');
     Route::get('/market', \App\Livewire\Market\MarketIndex::class)->name('market');
+    Route::get('/government', \App\Livewire\Government\GovernmentIndex::class)->name('government');
 });
 
 
@@ -34,6 +37,8 @@ Route::middleware(['auth', 'admin:GM'])->prefix('admin')->name('admin.')->group(
     Route::get('/avatars', \App\Livewire\Admin\AvatarManagement::class)->name('avatars');
     Route::get('/npcs', \App\Livewire\Admin\NpcManagement::class)->name('npcs');
     Route::get('/items', \App\Livewire\Admin\ItemManagement::class)->name('items');
+    Route::get('/stock-monitor', \App\Livewire\Admin\StockMonitor::class)->name('stock-monitor');
+    Route::get('/government', \App\Livewire\Admin\GovernmentManagement::class)->name('government');
 });
 
 require __DIR__ . '/auth.php';

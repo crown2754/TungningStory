@@ -139,9 +139,9 @@
                     @foreach($this->shopItems as $item)
                     <div class="bg-[#e8e0d5] border-2 border-tungning-wood rounded-lg p-4 shadow-lg flex flex-col justify-between hover:border-tungning-gold transition-colors relative group">
 
-                        {{-- 庫存標示 --}}
+                        {{-- 民間庫存標示（阿慶/郭老爹手上的貨，非官府） --}}
                         <div class="absolute top-2 right-2 text-xs font-bold text-gray-500">
-                            庫存: {{ $item->stock }}
+                            存貨: {{ $item->civilian_stock }}
                         </div>
 
                         <div class="flex gap-4">
@@ -173,7 +173,13 @@
 
                         <div class="mt-4 flex items-center justify-end gap-3 bg-white/50 p-2 rounded">
                             <button wire:click="decrement({{ $item->id }})" class="btn btn-xs btn-circle bg-gray-300 border-none hover:bg-gray-400 text-lg font-bold">-</button>
-                            <input type="text" value="{{ $cart[$item->id] }}" class="input input-xs w-12 text-center bg-white border-gray-300 font-bold" readonly>
+                            <input
+                                type="number"
+                                wire:model.lazy="cart.{{ $item->id }}"
+                                min="0"
+                                max="{{ $item->civilian_stock }}"
+                                class="input input-xs w-16 text-center bg-white border-gray-300 font-bold"
+                            >
                             <button wire:click="increment({{ $item->id }})" class="btn btn-xs btn-circle bg-tungning-gold border-none hover:bg-yellow-500 text-lg font-bold text-tungning-brown">+</button>
                         </div>
                     </div>

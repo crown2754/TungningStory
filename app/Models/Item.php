@@ -22,6 +22,7 @@ class Item extends Model
         'target_stock',
         'volatility',
         'is_tradable',
+        'civilian_stock',
     ];
 
     // 輔助方法：取得當前動態價格

@@ -90,6 +90,7 @@ class SystemSettings extends Component
             'settings.initial_gold' => 'required|integer|min:0',
             'settings.initial_stamina' => 'required|integer|min:0',
             'settings.initial_max_stamina' => 'required|integer|min:1',
+            'settings.market_purchase_multiplier' => 'required|numeric|min:0.1',
         ]);
 
         foreach ($this->settings as $key => $value) {

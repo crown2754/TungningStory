@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 title Tungning Story - Dev Launcher
 color 0A
 
@@ -16,20 +17,12 @@ if not exist "artisan" (
     exit
 )
 
-echo [1/3] Starting Laravel Backend...
-start "Laravel Server (Backend)" cmd /k "php artisan serve"
-
-echo [2/3] Starting Vite Frontend...
-start "Vite (Frontend)" cmd /k "npm run dev"
-
-echo [3/3] Starting Scheduler (Game Logic)...
-start "Scheduler (Game Logic)" cmd /k "php artisan schedule:work"
-
+echo Starting all services in a single window...
+echo Press Ctrl+C to stop all services.
 echo.
-echo ===================================================
-echo      All services started!
-echo      Frontend URL: http://127.0.0.1:8000
-echo ===================================================
-echo.
-echo You can close this window now. Services are running in background windows.
+
+:: 使用 concurrently 將所有服務統一在同一個視窗執行，並加上不同的顏色標籤以利辨識
+:: --kill-others 確保關閉時能一併終止所有服務
+npx concurrently -c "blue,green,magenta" "php artisan serve" "npm run dev" "php artisan schedule:work" --names="Server,Vite,Schedule" --kill-others
+
 pause

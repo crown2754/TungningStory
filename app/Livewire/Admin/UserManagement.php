@@ -23,6 +23,7 @@ class UserManagement extends Component
         'gold' => 0,
         'stamina' => 0,
         'max_stamina' => 0,
+        'inventory_capacity' => 0,
     ];
 
     public $isModalOpen = false;
@@ -47,6 +48,7 @@ class UserManagement extends Component
             'gold' => $this->editingUser->gold,
             'stamina' => $this->editingUser->stamina,
             'max_stamina' => $this->editingUser->max_stamina,
+            'inventory_capacity' => $this->editingUser->inventory_capacity,
         ];
 
         $this->isModalOpen = true;
@@ -88,6 +90,7 @@ class UserManagement extends Component
             'form.gold' => 'required|integer|min:0',
             'form.stamina' => 'required|integer|min:0',
             'form.max_stamina' => 'required|integer|min:1',
+            'form.inventory_capacity' => 'required|integer|min:0',
             'form.job' => 'required|string',
         ]);
 

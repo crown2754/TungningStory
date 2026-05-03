@@ -141,6 +141,9 @@ new class extends Component
                                     <x-dropdown-link :href="route('market')" wire:navigate class="text-tungning-brown hover:bg-tungning-gold/20 font-bold flex items-center gap-2">
                                         <span>🏮</span> {{ __('大井頭市集') }}
                                     </x-dropdown-link>
+                                    <x-dropdown-link :href="route('government')" wire:navigate class="text-tungning-brown hover:bg-tungning-gold/20 font-bold flex items-center gap-2">
+                                        <span>🏛️</span> {{ __('承天府政事堂') }}
+                                    </x-dropdown-link>
                                 </div>
                             </x-slot>
                         </x-dropdown>
@@ -267,6 +270,9 @@ new class extends Component
 
                 <x-responsive-nav-link :href="route('market')" :active="request()->routeIs('market')" wire:navigate>
                     🏮 {{ __('大井頭市集') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('government')" :active="request()->routeIs('government')" wire:navigate>
+                    🏛️ {{ __('承天府政事堂') }}
                 </x-responsive-nav-link>
             </div>
 

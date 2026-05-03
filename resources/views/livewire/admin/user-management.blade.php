@@ -129,6 +129,10 @@
                         <label class="label"><span class="label-text font-bold text-tungning-brown">體力上限</span></label>
                         <input type="number" wire:model="form.max_stamina" class="input input-bordered bg-white text-tungning-brown border-tungning-wood" />
                     </div>
+                    <div class="form-control">
+                        <label class="label"><span class="label-text font-bold text-tungning-brown">倉庫容量</span></label>
+                        <input type="number" wire:model="form.inventory_capacity" class="input input-bordered bg-white text-tungning-brown border-tungning-wood" />
+                    </div>
                 </div>
 
                 <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-tungning-wood/30">

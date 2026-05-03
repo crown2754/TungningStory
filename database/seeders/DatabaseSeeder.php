@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             'gold' => 100000,
             'stamina' => 100,
             'max_stamina' => 100,
+            'inventory_capacity' => 1000,
             'job' => '平民',
         ]);
 
@@ -45,6 +46,7 @@ class DatabaseSeeder extends Seeder
             'gold' => 100000,
             'stamina' => 100,
             'max_stamina' => 100,
+            'inventory_capacity' => 1000,
             'job' => '平民',
         ]);
 
@@ -57,6 +59,7 @@ class DatabaseSeeder extends Seeder
             'gold' => 100000,
             'stamina' => 100,
             'max_stamina' => 100,
+            'inventory_capacity' => 1000,
             'job' => '平民',
         ]);
     }
