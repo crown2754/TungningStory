@@ -35,6 +35,8 @@ class User extends Authenticatable
         'max_stamina',
         'inventory_capacity',
         'job',
+        'main_job',
+        'part_time_job',
         'role',
         'avatar_id',
     ];

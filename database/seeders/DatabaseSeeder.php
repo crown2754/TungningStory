@@ -35,6 +35,8 @@ class DatabaseSeeder extends Seeder
             'max_stamina' => 100,
             'inventory_capacity' => 1000,
             'job' => '平民',
+            'main_job' => '平民',
+            'part_time_job' => null,
         ]);
 
         // 也可以建立一個測試用的一般玩家
@@ -48,6 +50,8 @@ class DatabaseSeeder extends Seeder
             'max_stamina' => 100,
             'inventory_capacity' => 1000,
             'job' => '平民',
+            'main_job' => '平民',
+            'part_time_job' => null,
         ]);
 
         // 也可以建立一個測試用的一般玩家
@@ -61,6 +65,8 @@ class DatabaseSeeder extends Seeder
             'max_stamina' => 100,
             'inventory_capacity' => 1000,
             'job' => '平民',
+            'main_job' => '平民',
+            'part_time_job' => null,
         ]);
     }
 }

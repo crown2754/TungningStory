@@ -28,7 +28,7 @@
                         <th class="border-b border-tungning-gold/20">編號</th>
                         <th class="border-b border-tungning-gold/20">開拓者資料</th>
                         <th class="border-b border-tungning-gold/20">身分職等</th>
-                        <th class="border-b border-tungning-gold/20">職業</th>
+                        <th class="border-b border-tungning-gold/20">主職／兼職</th>
                         <th class="border-b border-tungning-gold/20">資產 (文)</th>
                         <th class="border-b border-tungning-gold/20">體力狀況</th>
                         <th class="border-b border-tungning-gold/20">批示</th>
@@ -53,7 +53,12 @@
                             <span class="badge bg-transparent border border-tungning-wood text-tungning-wood">平民</span>
                             @endif
                         </td>
-                        <td class="font-bold">{{ $user->job }}</td>
+                        <td class="font-bold text-sm">
+                            <span class="block">主：{{ $user->main_job ?? $user->job }}</span>
+                            @if(filled($user->part_time_job))
+                            <span class="block text-tungning-wood/80">兼：{{ $user->part_time_job }}</span>
+                            @endif
+                        </td>
                         <td class="font-mono font-bold text-lg">{{ number_format($user->gold) }}</td>
                         <td>
                             <div class="flex items-center gap-2">
@@ -114,8 +119,12 @@
                     </div>
 
                     <div class="form-control">
-                        <label class="label"><span class="label-text font-bold text-tungning-brown">職業身分</span></label>
-                        <input type="text" wire:model="form.job" class="input input-bordered bg-white text-tungning-brown border-tungning-wood" />
+                        <label class="label"><span class="label-text font-bold text-tungning-brown">主職業</span></label>
+                        <input type="text" wire:model="form.main_job" class="input input-bordered bg-white text-tungning-brown border-tungning-wood" />
+                    </div>
+                    <div class="form-control">
+                        <label class="label"><span class="label-text font-bold text-tungning-brown">兼職（二轉，可空白）</span></label>
+                        <input type="text" wire:model="form.part_time_job" class="input input-bordered bg-white text-tungning-brown border-tungning-wood" placeholder="未解鎖請留空" />
                     </div>
                     <div class="form-control">
                         <label class="label"><span class="label-text font-bold text-tungning-brown">配給資產 (文)</span></label>

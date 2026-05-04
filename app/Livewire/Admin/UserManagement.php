@@ -19,7 +19,8 @@ class UserManagement extends Component
         'name' => '',
         'email' => '',
         'role' => '',
-        'job' => '',
+        'main_job' => '',
+        'part_time_job' => '',
         'gold' => 0,
         'stamina' => 0,
         'max_stamina' => 0,
@@ -44,7 +45,8 @@ class UserManagement extends Component
             'name' => $this->editingUser->name,
             'email' => $this->editingUser->email,
             'role' => $this->editingUser->role,
-            'job' => $this->editingUser->job,
+            'main_job' => $this->editingUser->main_job ?? $this->editingUser->job,
+            'part_time_job' => $this->editingUser->part_time_job ?? '',
             'gold' => $this->editingUser->gold,
             'stamina' => $this->editingUser->stamina,
             'max_stamina' => $this->editingUser->max_stamina,
@@ -91,7 +93,8 @@ class UserManagement extends Component
             'form.stamina' => 'required|integer|min:0',
             'form.max_stamina' => 'required|integer|min:1',
             'form.inventory_capacity' => 'required|integer|min:0',
-            'form.job' => 'required|string',
+            'form.main_job' => 'required|string|max:255',
+            'form.part_time_job' => 'nullable|string|max:255',
         ]);
 
         // --- [核心權限保護邏輯] ---
@@ -132,8 +135,11 @@ class UserManagement extends Component
 
         // -----------------------
 
-        // 更新資料
-        $targetUser->update($this->form);
+        // 更新資料（沿用 job 欄位與主職同步，供舊畫面或未遷移程式碼讀取）
+        $payload = $this->form;
+        $payload['part_time_job'] = $payload['part_time_job'] === '' ? null : $payload['part_time_job'];
+        $payload['job'] = $payload['main_job'];
+        $targetUser->update($payload);
 
         // --- [新增] 如果有任何變更，寫入 AuditLog ---
         if (!empty($changes)) {

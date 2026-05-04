@@ -42,6 +42,8 @@ class AuthSwitcher extends Component
             'stamina' => 100,
             'max_stamina' => 100,
             'job' => '平民',
+            'main_job' => '平民',
+            'part_time_job' => null,
         ]);
 
         event(new Registered($user));

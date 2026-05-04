@@ -25,7 +25,10 @@ class Item extends Model
         'civilian_stock',
     ];
 
-    // 輔助方法：取得當前動態價格
+    /**
+     * 即時牌價（不存資料庫）。當 stock 與 target_stock 相等時，價格等於 base_price（平衡價）；
+     * 缺貨則高於基價、囤積則低於基價。調整「當前物價感」應優先改 stock／target_stock，而非改 base_price。
+     */
     public function getCurrentPriceAttribute()
     {
         // 經濟公式：P = P_base * (1 + V * ((S_target - S_current) / S_target))

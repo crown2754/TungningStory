@@ -48,7 +48,7 @@
                                 歡迎歸來，{{ auth()->user()->name }}
                             </h2>
                             <p class="text-tungning-wood font-bold text-sm opacity-80">
-                                身份：{{ auth()->user()->role === 'Player' ? '開拓者' : '管理者' }} ｜ 職業：{{ auth()->user()->job }}
+                                身份：{{ auth()->user()->role === 'Player' ? '開拓者' : '管理者' }} ｜ 主職：{{ auth()->user()->main_job ?? auth()->user()->job }}@if(filled(auth()->user()->part_time_job)) ｜ 兼職：{{ auth()->user()->part_time_job }}@endif
                             </p>
                         </div>
 

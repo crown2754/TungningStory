@@ -66,6 +66,8 @@ class AuthSwitcher extends Component
             'stamina' => $initialStamina,     // 使用動態設定
             'max_stamina' => $initialMaxStamina, // 使用動態設定
             'job' => '平民',
+            'main_job' => '平民',
+            'part_time_job' => null,
             'role' => 'Player', // 預設角色為玩家
         ]);
 
